@@ -7,9 +7,13 @@ if __name__ == '__main__':
     ["Mike", "Kuam", 33, 123],
     ["Roynam", "Skim", 13, 56],
     ["Leon", "Santa", 29, 23],
-    ["Mamba", "Avatar", 32, 43],
+    # ["Mamba", "Avatar", 32, 43],
     ]
 
     table = Table(headers=headers, data=data)
     table.draw_table()
 
+    print('\n')
+
+    table.add_row(["Mamba", "Avatar", 32, 43], position=3)
+    table.draw_table()
