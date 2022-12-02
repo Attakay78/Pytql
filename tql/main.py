@@ -13,10 +13,8 @@ if __name__ == '__main__':
     table = Table(headers=headers, data=data)
     table.draw_table()
 
-    print('\n')
-
     table.add_row(["Mamba", "Avatar", 32, 43], position=3)
     table.draw_table()
 
-    table.filter("Age").greater_than("30").filter("Count").greater_than("50")
+    table.filter("Age").greater_than("30").filter("Count").less_than("50").equals("43")
     table.draw_table()

@@ -90,6 +90,7 @@ class Table:
         print('='*self._max_width())
 
         self._draw_row()
+        print('\n')
 
     def add_row(self, row, position=None):
         """
@@ -144,10 +145,32 @@ class Table:
             print(f"Column {column} does not exist")
             return None
 
-    def greater_than(self, value):
+    def operation(self, op_type, value):
         filter_column_index = self.headers.index(self.filter_column)
-        for row in self.data:
-            if int(row[filter_column_index]) < int(value):
-                self.data.remove(row)
-        
+        temp_data = self.data.copy()
+
+        for row in temp_data:
+            if op_type == "greater_than":
+                if int(row[filter_column_index]) < int(value):
+                    self.data.remove(row)
+            elif op_type == "less_than":
+                if int(row[filter_column_index]) > int(value):
+                    self.data.remove(row)
+            elif op_type == "equals":
+                if int(row[filter_column_index]) != int(value):
+                    self.data.remove(row)
+            else:
+                print("Invalid operation type")
+                return None
+
         return self
+
+    def greater_than(self, value):
+        return self.operation("greater_than", value)
+
+    def less_than(self, value):
+        return self.operation("less_than", value)
+
+    def equals(self, value):
+        return self.operation("equals", value)
+    
