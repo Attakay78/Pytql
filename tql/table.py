@@ -18,6 +18,7 @@ class Table:
         self.gap_length = 3
         self.gap = ' '*self.gap_length
         self.data = data
+        self.filter_column = None
 
     def _max_width(self):
         # Calculates the maximum width of the table.
@@ -77,7 +78,7 @@ class Table:
     
     def draw_table(self):
         self.data.insert(0, self.headers)
-
+        self.max_field_widths = []
         for column_index in range(len(self.data[0])):
             self.max_field_widths.append(self._get_max_field_width(column_index))
 
@@ -134,3 +135,19 @@ class Table:
             None
         """
         pass
+    
+    def filter(self, column):
+        if column in self.headers:
+            self.filter_column = column
+            return self
+        else:
+            print(f"Column {column} does not exist")
+            return None
+
+    def greater_than(self, value):
+        filter_column_index = self.headers.index(self.filter_column)
+        for row in self.data:
+            if int(row[filter_column_index]) < int(value):
+                self.data.remove(row)
+        
+        return self

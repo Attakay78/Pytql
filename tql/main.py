@@ -17,3 +17,6 @@ if __name__ == '__main__':
 
     table.add_row(["Mamba", "Avatar", 32, 43], position=3)
     table.draw_table()
+
+    table.filter("Age").greater_than("30").filter("Count").greater_than("50")
+    table.draw_table()
