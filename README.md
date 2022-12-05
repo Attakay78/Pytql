@@ -1,5 +1,5 @@
 
-# Tql
+# Pytql
 
 Python Table Data Type with some SQL-like operations.
 
@@ -133,10 +133,19 @@ Python Table Data Type with some SQL-like operations.
   end_query()
 ```
 **return**:  List
+## Installation
+
+Install pytql with pip3
+
+```bash
+  pip3 install pytql==[version]
+  current version = 0.0.2
+```
+    
 ## Usage/Examples
 
 ```python
-from table import Table
+from pytql.table import Table
 
 if __name__ == '__main__':
     headers = ['First Name', 'Last Name', 'Age', 'Count']
@@ -144,8 +153,7 @@ if __name__ == '__main__':
     ["Richard", "Quaicoe", 23, 243],
     ["Mike", "Kuam", 33, 123],
     ["Roynam", "Skim", 13, 56],
-    ["Leon", "Santa", 29, 23],
-    # ["Mamba", "Avatar", 32, 43],
+    ["Leon", "Santa", 29, 23]
     ]
 
     table = Table(headers=headers, data=data)
