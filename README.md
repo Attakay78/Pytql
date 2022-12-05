@@ -6,7 +6,7 @@ Python Table Data Type with some SQL-like operations.
 
 ## Authors
 
-- [@AT_Khay (Richard quaicoe)](https://github.com/Attakay78/)
+- [@AT_Khay (Richard Quaicoe)](https://github.com/Attakay78/)
 
 
 # API Reference
