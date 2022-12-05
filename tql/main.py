@@ -1,3 +1,5 @@
+# Example
+
 from table import Table
 
 if __name__ == '__main__':
@@ -11,10 +13,20 @@ if __name__ == '__main__':
     ]
 
     table = Table(headers=headers, data=data)
-    table.draw_table()
+    t_data = table.get_data()
+    table.draw_table(t_data)
 
     table.add_row(["Mamba", "Avatar", 32, 43], position=3)
-    table.draw_table()
+    table.draw_table(t_data)
 
-    table.filter("Age").greater_than("30").filter("Count").less_than("50").equals("43")
-    table.draw_table()
+    t1 = table.query().filter_by("Age").greater_than("30").filter_by("Count").greater_than("50").end_query()
+    table.draw_table(t1)
+
+    table.update("Age").where("32", "67")
+    table.draw_table(t_data)
+
+    t1 = table.query().filter_by("Age").greater_than("50").end_query()
+    table.draw_table(t1)
+
+    table.add_row(["Clean", "Quain", 32, 43], position=2)
+    table.draw_table(t_data)
