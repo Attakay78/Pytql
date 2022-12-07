@@ -1,6 +1,6 @@
 # Example
 
-from pytql.table import Table
+from pytql import Table
 
 if __name__ == '__main__':
     headers = ['First Name', 'Last Name', 'Age', 'Count']
