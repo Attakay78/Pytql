@@ -135,17 +135,17 @@ Python Table Data Type with some SQL-like operations.
 **return**:  List
 ## Installation
 
-Install pytql with pip3
+Install pytql with pip
 
 ```bash
-  pip3 install pytql==[version]
+  pip install pytql==[version]
   current version = 0.0.2
 ```
     
 ## Usage/Examples
 
 ```python
-from pytql.table import Table
+from pytql import Table
 
 if __name__ == '__main__':
     headers = ['First Name', 'Last Name', 'Age', 'Count']
