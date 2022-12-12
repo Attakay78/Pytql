@@ -8,7 +8,6 @@ class Data(object):
         self._headers = headers
         self._filter_column = None
 
-
     def _operation(self, op_type, value):
         # Checks the filtering operation type and performs that operation.
         filter_column_index = self._headers.index(self._filter_column)
@@ -45,7 +44,7 @@ class Data(object):
 
         Args:
             column (String): Column to be filtered.
-        
+
         Returns:
             Data | None
         """
@@ -58,10 +57,10 @@ class Data(object):
     def greater_than(self, value):
         """
         Filters the table data by value greater than provided.
-        
+
         Args:
             value (String): value to be filter by.
-        
+
         Returns:
             Data | None
         """
@@ -70,10 +69,10 @@ class Data(object):
     def less_than(self, value):
         """
         Filters the table data by value less than provided.
-        
+
         Args:
             value (String): value to be filter by.
-        
+
         Returns:
             Data | None
         """
@@ -82,15 +81,15 @@ class Data(object):
     def equals(self, value):
         """
         Filters the table data by value equal to value provided.
-        
+
         Args:
             value (String): value to be filter by.
-        
+
         Returns:
             Data | None
         """
         return self._operation("equals", value)
-    
+
     def end_query(self):
         """
         Ends table quering session.
