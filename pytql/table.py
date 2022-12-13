@@ -4,6 +4,7 @@ from copy import deepcopy
 # Internal imports
 from .data import Data
 from .colors import Color
+from .data_converter import DataConverter
 
 
 class Table(object):
@@ -34,11 +35,17 @@ class Table(object):
             Color for the table design
         """
 
-        self.headers = headers
+        data_instance = DataConverter(data=data, headers=headers).parse()
+        if headers:
+            self.data_instance = Data(data=data_instance[1], headers=headers)
+            self.headers = headers
+        else:
+            self.data_instance = Data(data=data_instance[1], headers=data_instance[0])
+            self.headers = data_instance[0]
+
         self.max_field_widths = []
         self.gap_length = 3
         self.gap = " " * self.gap_length
-        self.data_instance = Data(data=data, headers=headers)
         self.filter_column = None
         self.header_color = header_color
         self.row_color = row_color
