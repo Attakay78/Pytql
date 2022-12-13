@@ -1,4 +1,4 @@
-class Color:
+class Color(object):
 
     """Colors class for table beautification"""
 
