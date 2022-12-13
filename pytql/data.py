@@ -15,13 +15,17 @@ class Data(object):
 
         for row in temp_data:
             if op_type == "greater_than":
-                if int(row[filter_column_index]) < int(value):
+                if (row[filter_column_index] == "None") or (
+                    int(row[filter_column_index]) < int(value)
+                ):
                     self.data.remove(row)
             elif op_type == "less_than":
-                if int(row[filter_column_index]) > int(value):
+                if (row[filter_column_index]) or (
+                    int(row[filter_column_index]) > int(value)
+                ):
                     self.data.remove(row)
             elif op_type == "equals":
-                if int(row[filter_column_index]) != int(value):
+                if row[filter_column_index] != value:
                     self.data.remove(row)
             else:
                 print("Invalid operation type")
