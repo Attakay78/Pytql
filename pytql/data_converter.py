@@ -54,10 +54,7 @@ class DataConverter(object):
 
     def _fill_missing_values(self, data):
         # Function to padding all missing table fields with None value.
-        max_length = float("-inf")
-        for row in data:
-            if len(row) > max_length:
-                max_length = len(row)
+        max_length = max([len(row) for row in data])
 
         for index, row in enumerate(data):
             data[index] = row + (["None"] * (max_length - len(row)))
