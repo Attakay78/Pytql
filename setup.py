@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.0.3'
-DESCRIPTION = 'Python Table Data Type with some SQL-like operations.'
+VERSION = "0.0.3"
+DESCRIPTION = "Python Table Data Type with some SQL-like operations."
 
 # Setting up
 setup(
@@ -15,8 +15,8 @@ setup(
     packages=find_packages(),
     install_requires=[],
     url="https://github.com/Attakay78/Pytql",
-    setup_requires=['wheel'],
-    keywords=['python', 'table', 'sql', 'query', 'filter'],
+    setup_requires=["wheel"],
+    keywords=["python", "table", "sql", "query", "filter"],
     classifiers=[
         "Development Status :: 1 - Planning",
         "Intended Audience :: Developers",
@@ -24,5 +24,5 @@ setup(
         "Operating System :: Unix",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: Microsoft :: Windows",
-    ]
+    ],
 )
