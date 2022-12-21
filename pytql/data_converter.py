@@ -1,4 +1,4 @@
-from .exceptions import UnsupportedDataType, HeadersRequired
+from .exceptions import UnsupportedDataType
 
 
 class DataConverter(object):
@@ -21,6 +21,7 @@ class DataConverter(object):
 
         self.data = data
         self.headers = headers
+        self.default_headers = None
 
     def parse(self):
         """
@@ -41,7 +42,11 @@ class DataConverter(object):
             if self.headers:
                 return (self.headers, data)
             else:
-                raise HeadersRequired()
+                default_headers = [
+                    "c" + str(i) for i in range(0, len(data[0]))
+                ]
+                self.default_headers = default_headers
+                return (default_headers, data)
         else:
             raise UnsupportedDataType()
 
