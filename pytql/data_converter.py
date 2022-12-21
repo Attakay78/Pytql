@@ -43,7 +43,7 @@ class DataConverter(object):
                 return (self.headers, data)
             else:
                 default_headers = [
-                    "c" + str(i) for i in range(0, len(data[0]))
+                    "Column" + str(field_data) for field_data in range(len(data[0]))
                 ]
                 self.default_headers = default_headers
                 return (default_headers, data)
