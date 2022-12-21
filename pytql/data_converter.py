@@ -60,7 +60,7 @@ class DataConverter(object):
                 max_length = len(row)
 
         for index, row in enumerate(data):
-            data[index] = row + ["None" for _ in range(max_length - len(row))]
+            data[index] = row + (["None"] * (max_length - len(row)))
 
         return data
 
