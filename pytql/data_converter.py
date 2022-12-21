@@ -48,7 +48,9 @@ class DataConverter(object):
                 self.default_headers = default_headers
                 return (default_headers, data)
         else:
-            raise UnsupportedDataType()
+            raise UnsupportedDataType(
+                message="Data type is not supported, provide list | dict."
+            )
 
     def _fill_missing_values(self, data):
         # Function to padding all missing table fields with None value.
