@@ -1,3 +1,6 @@
+from .exceptions import ColumnDoesNotExist
+
+
 class Data(object):
     """
     A class used to handle table data.
@@ -39,8 +42,7 @@ class Data(object):
             self._filter_column = column
             return True
 
-        print(f"Column {column} does not exist")
-        return False
+        raise ColumnDoesNotExist(f"{column} column name does not exist.")
 
     def filter_by(self, column):
         """
