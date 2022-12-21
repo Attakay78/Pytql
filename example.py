@@ -50,13 +50,7 @@ if __name__ == "__main__":
     table2.add_row(["Jon", "Doe", 23, 232], position=3)
     table2.draw_table(table2.get_data())
 
-    t2 = (
-        table2
-        .query()
-        .filter_by("c0")
-        .equals("Richard")
-        .end_query()
-    )
+    t2 = table2.query().filter_by("Column0").equals("Richard").end_query()
     table2.draw_table(t2)
 
     # You can use table (for dict type) or table1 (for list type)
