@@ -5,6 +5,8 @@ from copy import deepcopy
 from .data import Data
 from .colors import Color
 from .data_converter import DataConverter
+from .model import Model
+from .exceptions import ColumnDoesNotExist
 
 
 class Table(object):
@@ -14,8 +16,9 @@ class Table(object):
 
     def __init__(
         self,
-        headers=None,
+        model: Model,
         data=None,
+        file=None,
         header_color=Color.default,
         row_color=Color.default,
         table_color=Color.default,
@@ -34,39 +37,41 @@ class Table(object):
         table_color: Color
             Color for the table design
         """
+        model = model()
+        self.__model_fields = model._model_fields
+        self.__headers = model._headers
 
-        data_instance = DataConverter(data=data, headers=headers).parse()
-        if headers:
-            self.data_instance = Data(data=data_instance[1], headers=headers)
-            self.headers = headers
-        else:
-            self.data_instance = Data(data=data_instance[1], headers=data_instance[0])
-            self.headers = data_instance[0]
+        self.__data_converter = DataConverter(
+            data=data, file=file, column_length=len(self.__headers)
+        )
+        parsed_data = self.__data_converter.parse()
+        self.__data_converter.validate_data(data=parsed_data, fields=self.__model_fields)
+        self.__data = Data(data=parsed_data, headers=self.__headers)
 
-        self.max_field_widths = []
-        self.gap_length = 3
-        self.gap = " " * self.gap_length
-        self.filter_column = None
-        self.header_color = header_color
-        self.row_color = row_color
-        self.table_color = table_color
+        self.__max_field_widths = []
+        self.__gap_length = 3
+        self.__gap = " " * self.__gap_length
+        self.__filter_column = None
+        self.__header_color = header_color
+        self.__row_color = row_color
+        self.__table_color = table_color
 
-    def _max_width(self):
+    def __max_width(self):
         # Calculates the maximum width of the table.
 
         total_width = 0
-        for width in self.max_field_widths:
+        for width in self.__max_field_widths:
             total_width += width
-        return total_width + (len(self.max_field_widths) - 1) * self.gap_length
+        return total_width + (len(self.__max_field_widths) - 1) * self.__gap_length
 
-    def _get_max_field_width(self, column_index, data):
+    def __get_max_field_width(self, column_index, data):
         # Calculates the maximum width of each field of the table.
 
         row_length = len(data)
 
         def _get_max_width(loop_length, mod_type="even"):
             # Calculates the maximum width for each field column in the table
-            # Using 2 pointer tp reduce the number of iterations in the row
+            # Using left and right pointers to reduce the number of iterations in the row
             max_width = 0
             for index in range(loop_length):
                 if (mod_type == "odd") and (index == loop_length - 1):
@@ -93,25 +98,25 @@ class Table(object):
         else:
             return _get_max_width((row_length // 2) + 1, mod_type="odd")
 
-    def _draw_header(self):
+    def __draw_header(self):
         # Drawing table header using string formatting
         format_header = ""
-        for index, header in enumerate(self.headers):
+        for index, header in enumerate(self.__headers):
             if index == 0:
-                format_header += f"{self.header_color}{header:{self.max_field_widths[index]}s}{Color.color_terminate}"
+                format_header += f"{self.__header_color}{header:{self.__max_field_widths[index]}s}{Color.color_terminate}"
             else:
-                format_header += f"{self.header_color}{self.gap}{header:{self.max_field_widths[index]}s}{Color.color_terminate}"
+                format_header += f"{self.__header_color}{self.__gap}{header:{self.__max_field_widths[index]}s}{Color.color_terminate}"
         return format_header
 
-    def _draw_row(self, data):
+    def __draw_row(self, data):
         # Drawing table rows using string formatting
         for row in data:
             format_row = ""
             for index, cell in enumerate(row):
                 if index == 0:
-                    format_row += f"{self.row_color}{str(cell):{self.max_field_widths[index]}s}{Color.color_terminate}"
+                    format_row += f"{self.__row_color}{str(cell):{self.__max_field_widths[index]}s}{Color.color_terminate}"
                 else:
-                    format_row += f"{self.row_color}{self.gap}{str(cell):{self.max_field_widths[index]}s}{Color.color_terminate}"
+                    format_row += f"{self.__row_color}{self.__gap}{str(cell):{self.__max_field_widths[index]}s}{Color.color_terminate}"
 
             print(format_row)
 
@@ -125,19 +130,19 @@ class Table(object):
         Returns:
             None.
         """
-        data.insert(0, self.headers)
-        self.max_field_widths = []
+        data.insert(0, self.__headers)
+        self.__max_field_widths = []
         for column_index in range(len(data[0])):
-            self.max_field_widths.append(self._get_max_field_width(column_index, data))
+            self.__max_field_widths.append(self.__get_max_field_width(column_index, data))
 
         data.pop(0)
 
-        heading = self._draw_header()
-        print(f"{self.table_color}{'=' * self._max_width()}{Color.color_terminate}")
+        heading = self.__draw_header()
+        print(f"{self.__table_color}{'=' * self.__max_width()}{Color.color_terminate}")
         print(heading)
-        print(f"{self.table_color}{'=' * self._max_width()}{Color.color_terminate}")
+        print(f"{self.__table_color}{'=' * self.__max_width()}{Color.color_terminate}")
 
-        self._draw_row(data=data)
+        self.__draw_row(data=data)
         print("\n")
 
     def add_row(self, row, position=None):
@@ -151,15 +156,17 @@ class Table(object):
         Returns:
             None.
         """
+        new_row = self.__data_converter.match_added_row_to_table(row=row)
+        self.__data_converter.validate_data(data=[new_row], fields=self.__model_fields)
 
-        def _position_row(new_row=row):
+        def _position_row(new_row=new_row):
             if position:
-                self.data_instance.data.insert(position, new_row)
+                self.__data.data.insert(position, new_row)
             else:
-                self.data_instance.data.insert(len(self.data_instance.data), new_row)
+                self.__data.data.insert(len(self.__data.data), new_row)
 
         new_row_length = len(row)
-        table_column_length = len(self.data_instance.data[0])
+        table_column_length = len(self.__data.data[0])
 
         if new_row_length == table_column_length:
             _position_row()
@@ -187,16 +194,15 @@ class Table(object):
         """
         pass
 
-    def _column_exist(self, column):
+    def __column_exist(self, column):
         # Checks if column to be altered exists
         # and returns True otherwise False
-        if column in self.headers:
-            self.filter_column = column
-            self.data_instance.filter_column = column
+        if column in self.__headers:
+            self.__filter_column = column
+            self.__data.filter_column = column
             return True
 
-        print(f"Column {column} does not exist")
-        return False
+        raise ColumnDoesNotExist(f"Column name `{column}` does not exist.")
 
     def update(self, column):
         """
@@ -208,7 +214,7 @@ class Table(object):
         Returns:
             Table | None
         """
-        column_exist = self._column_exist(column)
+        column_exist = self.__column_exist(column)
         if column_exist:
             return self
 
@@ -222,9 +228,9 @@ class Table(object):
             value (String): Current value in table.
             updated_value (String): New value to replace old table value.
         """
-        filter_column_index = self.headers.index(self.filter_column)
+        filter_column_index = self.__headers.index(self.__filter_column)
 
-        for row in self.data_instance.data:
+        for row in self.__data.data:
             if str(row[filter_column_index]) == str(value):
                 row[filter_column_index] = updated_value
 
@@ -235,7 +241,7 @@ class Table(object):
         Returns:
             Data
         """
-        return deepcopy(self.data_instance)
+        return deepcopy(self.__data)
 
     def get_data(self):
         """
@@ -244,4 +250,4 @@ class Table(object):
         Returns:
             List
         """
-        return self.data_instance.data
+        return self.__data.data

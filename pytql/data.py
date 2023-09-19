@@ -18,7 +18,7 @@ class Data(object):
 
         for row in temp_data:
             if op_type == "greater_than":
-                if (row[filter_column_index] == "None") or (
+                if (row[filter_column_index] == None) or (
                     int(row[filter_column_index]) < int(value)
                 ):
                     self.data.remove(row)
@@ -42,7 +42,7 @@ class Data(object):
             self._filter_column = column
             return True
 
-        raise ColumnDoesNotExist(f"{column} column name does not exist.")
+        raise ColumnDoesNotExist(f"Column name `{column}` does not exist.")
 
     def filter_by(self, column):
         """
