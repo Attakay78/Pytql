@@ -1,6 +1,7 @@
 # Example
 
 from pytql import Table, Color, Model, CharField, IntField
+from pytql.repl import start_client, ReplType
 
 
 if __name__ == "__main__":
@@ -45,30 +46,31 @@ if __name__ == "__main__":
     )
 
     # Draw student table
-    student_table.draw_table(student_table.get_data())
-
-    # Add new row to student row at position 3
-    # student_table.add_row(["Jon", "Doe", 23, 232], position=3)
     # student_table.draw_table(student_table.get_data())
 
-    # Query student table by filtering `First Name`.
-    t2 = student_table.query().filter_by("First Name").equals("Richard").end_query()
-    student_table.draw_table(t2)
+    # # Add new row to student row at position 3
+    # # student_table.add_row(["Jon", "Doe", 23, 232], position=3)
+    # # student_table.draw_table(student_table.get_data())
 
-    # Query student table by filtering with `First Name` and `length` columns.
-    t1 = (
-        student_table.query()
-        .filter_by("First Name")
-        .equals("Richard")
-        .filter_by("length")
-        .greater_than("50")
-        .end_query()
-    )
-    student_table.draw_table(t1)
+    # # Query student table by filtering `First Name`.
+    # t2 = student_table.query().filter_by("First Name").equals("Richard").end_query()
+    # student_table.draw_table(t2)
 
-    # # Update student `age` column
-    # student_table.update("age").where("32", "67")
-    # student_table.draw_table(student_table.get_data())
+    # # Query student table by filtering with `First Name` and `length` columns.
+    # t1 = (
+    #     student_table.query()
+    #     .filter_by("First Name")
+    #     .equals("Richard")
+    #     .filter_by("length")
+    #     .greater_than("50")
+    #     .end_query()
+    # )
+    # student_table.draw_table(t1)
 
-    # # NB: Same operations perform on Student table can be performed on Employee table
-    employee_table.draw_table(employee_table.get_data())
+    # # # Update student `age` column
+    # # student_table.update("age").where("32", "67")
+    # # student_table.draw_table(student_table.get_data())
+
+    # # # NB: Same operations perform on Student table can be performed on Employee table
+    # employee_table.draw_table(employee_table.get_data())
+    start_client(__name__, repl_type=ReplType.ipython_repl)
