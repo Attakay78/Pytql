@@ -13,6 +13,54 @@ from .exceptions import (
 )
 
 
+class Formatter(object):
+    def __init__(self, data, table_color):
+        self.BORDER_CHARACTER = "+"
+        self.HEADER_CHARACTER = "-"
+        self.GAP_CHARACTER = "|"
+        self.PADDING_CHARACTER = " "
+
+        self.data = data
+        self.table_color = table_color
+        self.max_field_widths = []
+        self.__gap = (
+            lambda border_character, gap_character: f"{self.table_color}"
+            f"{border_character}{gap_character}{border_character}{Color.color_terminate}"
+        )
+    
+    def style_horizontal_line(self):
+        table_style = f"{self.table_color}+-{Color.color_terminate}"
+        for index, width in enumerate(self.max_field_widths):
+            if index == 0:
+                table_style += f"{self.table_color}{self.HEADER_CHARACTER * width:{width}s}{Color.color_terminate}"
+            elif index == len(self.max_field_widths) - 1:
+                table_style += (
+                    f"{self.__gap(self.HEADER_CHARACTER, self.BORDER_CHARACTER)}"
+                    f"{self.table_color}{self.HEADER_CHARACTER * (width+1):{width}s}+{Color.color_terminate}"
+                )
+            else:
+                table_style += (
+                    f"{self.__gap(self.HEADER_CHARACTER, self.BORDER_CHARACTER)}"
+                    f"{self.table_color}{self.HEADER_CHARACTER * width:{width}s}{Color.color_terminate}"
+                )
+        return table_style
+
+    def format_row_data(self, data, color):
+        formatted_row = f"{self.table_color}| {Color.color_terminate}"
+        for index, cell in enumerate(data):
+            if index == 0:
+                formatted_row += (
+                    f"{color}{str(cell):{self.max_field_widths[index]}s}{Color.color_terminate}"
+                )
+            else:
+                formatted_row += (
+                    f"{self.__gap(self.PADDING_CHARACTER, self.GAP_CHARACTER)}{color}"
+                    f"{str(cell):{self.max_field_widths[index]}s}{Color.color_terminate}"
+                )
+        formatted_row += f"{self.table_color} |{Color.color_terminate}"
+        return formatted_row
+
+
 class Table(object):
     """
     A class used to create Table data type.
@@ -41,10 +89,7 @@ class Table(object):
         table_color: Color
             Color for the table design
         """
-        self.BORDER_CHARACTER = "+"
-        self.HEADER_CHARACTER = "-"
-        self.GAP_CHARACTER = "|"
-        self.PADDING_CHARACTER = " "
+        
 
         model = model()
         self.__model_fields = model._model_fields
@@ -69,10 +114,8 @@ class Table(object):
         self.__header_color = header_color
         self.__row_color = row_color
         self.__table_color = table_color
-        self.__gap = (
-            lambda border_character, gap_character: f"{self.__table_color}"
-            f"{border_character}{gap_character}{border_character}{Color.color_terminate}"
-        )
+        self.__formatter = Formatter(data, self.__table_color)
+        
 
     def __get_max_field_width(self, column_index, data):
         # Calculates the maximum width of each field of the table.
@@ -103,40 +146,8 @@ class Table(object):
                 mod_type="odd",
             )
 
-    def __style_table(self):
-        table_style = f"{self.__table_color}+-{Color.color_terminate}"
-        for index, width in enumerate(self.__max_field_widths):
-            if index == 0:
-                table_style += f"{self.__table_color}{self.HEADER_CHARACTER * width:{width}s}{Color.color_terminate}"
-            elif index == len(self.__max_field_widths) - 1:
-                table_style += (
-                    f"{self.__gap(self.HEADER_CHARACTER, self.BORDER_CHARACTER)}"
-                    f"{self.__table_color}{self.HEADER_CHARACTER * (width+1):{width}s}+{Color.color_terminate}"
-                )
-            else:
-                table_style += (
-                    f"{self.__gap(self.HEADER_CHARACTER, self.BORDER_CHARACTER)}"
-                    f"{self.__table_color}{self.HEADER_CHARACTER * width:{width}s}{Color.color_terminate}"
-                )
-        return table_style
-
-    def __format_row_data(self, data, color):
-        formatted_row = f"{self.__table_color}| {Color.color_terminate}"
-        for index, cell in enumerate(data):
-            if index == 0:
-                formatted_row += (
-                    f"{color}{str(cell):{self.__max_field_widths[index]}s}{Color.color_terminate}"
-                )
-            else:
-                formatted_row += (
-                    f"{self.__gap(self.PADDING_CHARACTER, self.GAP_CHARACTER)}{color}"
-                    f"{str(cell):{self.__max_field_widths[index]}s}{Color.color_terminate}"
-                )
-        formatted_row += f"{self.__table_color} |{Color.color_terminate}"
-        return formatted_row
-
     def __draw_header(self):
-        return self.__format_row_data(
+        return self.__formatter.format_row_data(
             self.__headers,
             self.__header_color,
         )
@@ -145,12 +156,12 @@ class Table(object):
         # Drawing table rows using string formatting
         for row in data:
             print(
-                self.__format_row_data(
+                self.__formatter.format_row_data(
                     row,
                     self.__row_color,
                 )
             )
-        print(self.__style_table())
+        print(self.__formatter.style_horizontal_line())
 
     def draw_table(self, data=None):
         """
@@ -162,6 +173,7 @@ class Table(object):
         Returns:
             None.
         """
+        
         if data is None:
             data = self.__data.data
 
@@ -171,10 +183,11 @@ class Table(object):
             self.__max_field_widths.append(self.__get_max_field_width(column_index, data))
 
         data.pop(0)
+        self.__formatter.max_field_widths = self.__max_field_widths
 
-        print(self.__style_table())
+        print(self.__formatter.style_horizontal_line())
         print(self.__draw_header())
-        print(self.__style_table())
+        print(self.__formatter.style_horizontal_line())
 
         self.__draw_row(data=data)
         print("\n")
