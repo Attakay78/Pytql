@@ -7,7 +7,7 @@ from pytql.repl import start_client, ReplType
 if __name__ == "__main__":
 
     class Student(Model):
-        first_name = CharField(name="First Name", max_length=10)
+        first_name = CharField(name="First Name", max_length=20)
         last_name = CharField()
         age = IntField()
         length = IntField()
@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
     # Data to populate Student table.
     student_data = [
-        ["Richard", "Quaicoe", 23, 243],
+        ["Richardfgfnggkmg", "Quaicoe", 23, 243],
         ["Mike", "Kuam", 33, 123],
         ["Roynam", "Skim", 13, 56],
         ["Leon", "Santa", 29, 23],
@@ -33,20 +33,20 @@ if __name__ == "__main__":
         data=student_data,
         header_color=Color.cyan,
         row_color=Color.green,
-        table_color=Color.blue,
+        table_color=Color.red,
     )
 
     # Example with passing file data with `Employee` Model.
-    employee_table = Table(
-        model=Employee,
-        file="user_data.txt",
-        header_color=Color.cyan,
-        row_color=Color.green,
-        table_color=Color.blue,
-    )
+    # employee_table = Table(
+    #     model=Employee,
+    #     file="user_data.txt",
+    #     header_color=Color.cyan,
+    #     row_color=Color.green,
+    #     table_color=Color.blue,
+    # )
 
     # Draw student table
-    # student_table.draw_table(student_table.get_data())
+    student_table.draw_table(student_table.get_data())
 
     # # Add new row to student row at position 3
     # # student_table.add_row(["Jon", "Doe", 23, 232], position=3)
@@ -73,4 +73,4 @@ if __name__ == "__main__":
 
     # # # NB: Same operations perform on Student table can be performed on Employee table
     # employee_table.draw_table(employee_table.get_data())
-    start_client(__name__, repl_type=ReplType.ipython_repl)
+    # start_client(__name__, repl_type=ReplType.ipython_repl)
