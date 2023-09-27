@@ -37,13 +37,14 @@ if __name__ == "__main__":
     )
 
     # Example with passing file data with `Employee` Model.
-    # employee_table = Table(
-    #     model=Employee,
-    #     file="user_data.txt",
-    #     header_color=Color.cyan,
-    #     row_color=Color.green,
-    #     table_color=Color.blue,
-    # )
+    employee_table = Table(
+        model=Employee,
+        file="user_data.json",
+        header_color=Color.cyan,
+        row_color=Color.green,
+        table_color=Color.blue,
+    )
+    employee_table.draw_table()
 
     # Draw student table
     student_table.draw_table()
