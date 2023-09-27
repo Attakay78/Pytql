@@ -1,10 +1,16 @@
 from .colors import Color
 
 
-HEADER = f"{Color.cyan}Welcome to Pytql REPL! We hope you enjoy your stay!{Color.color_terminate}"
-FOOTER = f"{Color.cyan}Thanks for visiting the Pytql REPL today!{Color.color_terminate}"
+HEADER = f"{Color.cyan}Welcome to Pytql REPL! We hope you enjoy your stay!{Color.color_terminate}" # Repl Header Text to display.
+FOOTER = f"{Color.cyan}Thanks for visiting the Pytql REPL today!{Color.color_terminate}" #Repl Footer Text to display.
+
 
 def default_repl(scope) -> None:
+    """Default repl to run Pytql client. Non-interactive.
+
+    Args:
+        scope (_type_): Variable scope to expose to the repl.
+    """
     print(HEADER)
     print("crtl-c to quit\n")
 
@@ -34,6 +40,11 @@ def default_repl(scope) -> None:
 
 
 def interactive_repl(scope) -> None:
+    """Interactive repl to run Pytql client. Interactive but no autocomplete.
+
+    Args:
+        scope (_type_): Variable scope to expose to the repl.
+    """
     from code import InteractiveConsole
     header = HEADER + "\n" + "crtl-d to quit\n"
     footer = FOOTER
@@ -42,6 +53,11 @@ def interactive_repl(scope) -> None:
 
 
 def ipython_repl(scope) -> None:
+    """Interactive repl to run Pytql client. Supports autocomplete and autosuggestions.
+
+    Args:
+        scope (_type_): Variable scope to expose to the repl.
+    """
     import IPython
     header = HEADER
     footer = FOOTER
@@ -53,6 +69,8 @@ def ipython_repl(scope) -> None:
 
 
 class ReplType:
+    """Class listing of repl types.
+    """
     default_repl = default_repl
     interactive_repl = interactive_repl
     ipython_repl = ipython_repl
@@ -60,6 +78,12 @@ class ReplType:
 
 
 def start_client(module_name, repl_type:ReplType = ReplType.default_repl):
+    """Function to start the Pytql client repl.
+
+    Args:
+        module_name (_type_): Name of the module Pytql is being run from.
+        repl_type (_type_, optional): Repl type to use. Defaults to ReplType.default_repl.
+    """
     import importlib
 
     mod = importlib.import_module(module_name)

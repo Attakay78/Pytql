@@ -15,6 +15,12 @@ from .exceptions import (
 
 class Formatter(object):
     def __init__(self, data, table_color):
+        """Class to format table display.
+
+        Args:
+            data (_type_): Table data to  be formatted for display.
+            table_color (_type_): Table color.
+        """
         self.BORDER_CHARACTER = "+"
         self.HEADER_CHARACTER = "-"
         self.GAP_CHARACTER = "|"
@@ -29,6 +35,11 @@ class Formatter(object):
         )
     
     def style_horizontal_line(self):
+        """Function to style horizontal lines around table.
+
+        Returns:
+            String: Formatted string for horizontal display.
+        """
         table_style = f"{self.table_color}+-{Color.color_terminate}"
         for index, width in enumerate(self.max_field_widths):
             if index == 0:
@@ -46,6 +57,15 @@ class Formatter(object):
         return table_style
 
     def format_row_data(self, data, color):
+        """Function to format row data.
+
+        Args:
+            data (_type_): Row data to be formatted for display.
+            color (_type_): Row color.
+
+        Returns:
+            String: Formatted string for row display.
+        """
         formatted_row = f"{self.table_color}| {Color.color_terminate}"
         for index, cell in enumerate(data):
             if index == 0:
@@ -62,10 +82,6 @@ class Formatter(object):
 
 
 class Table(object):
-    """
-    A class used to create Table data type.
-    """
-
     def __init__(
         self,
         model: Model,
@@ -75,22 +91,17 @@ class Table(object):
         row_color=Color.default,
         table_color=Color.default,
     ):
-        """
-        Parameters
-        ----------
-        headers: List, Optional
-            A collection of table headers.
-        data: Union[List,Tuple, Set, Dictionary], Optional
-            The data to be populated in the table.
-        header_color: Color
-            Color for the header
-        row_color: Color
-            Color for the rows
-        table_color: Color
-            Color for the table design
+        """Class used to create Table data type.
+
+        Args:
+            model (Model): Model to be used to validate table data.
+            data (_type_, optional): Data to be populated in table. Defaults to None.
+            file (_type_, optional): File conatining data to be populated. Defaults to None.
+            header_color (_type_, optional): Table header color. Defaults to Color.default.
+            row_color (_type_, optional): Table row color. Defaults to Color.default.
+            table_color (_type_, optional): Table style color. Defaults to Color.default.
         """
         
-
         model = model()
         self.__model_fields = model._model_fields
         self.__headers = model._headers

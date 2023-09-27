@@ -2,17 +2,28 @@ from .exceptions import ColumnDoesNotExist
 
 
 class Data(object):
-    """
-    A class used to handle table data.
-    """
 
     def __init__(self, data=None, headers=None):
+        """Class used to handle table data.
+
+        Args:
+            data (_type_, optional): Table data. Defaults to None.
+            headers (_type_, optional): Table headers. Defaults to None.
+        """
         self.data = data
         self._headers = headers
         self._filter_column = None
 
     def _operation(self, op_type, value):
-        # Checks the filtering operation type and performs that operation.
+        """Function for filtering operation types and performing those operations.
+
+        Args:
+            op_type (_type_): Operation type to be performed.
+            value (_type_): Value to be filtered against.
+
+        Returns:
+            Data : An instance of Data.
+        """
         filter_column_index = self._headers.index(self._filter_column)
         temp_data = self.data.copy()
 
@@ -37,7 +48,14 @@ class Data(object):
         return self
 
     def _column_exist(self, column):
-        # Checks if column to be filtered exist
+        """Function to check if column to be filtered exist.
+
+        Args:
+            column (_type_): Column to be filtered.
+        
+        Returns:
+            Boolean : True if column exist else Raises an ColumnDoesNotExist Exception.
+        """
         if column in self._headers:
             self._filter_column = column
             return True

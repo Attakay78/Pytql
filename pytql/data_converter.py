@@ -11,11 +11,12 @@ class DataConverter(object):
         return cls.instance
 
     def __init__(self, data, file, column_length):
-        """
-        Parameters
-        ----------
-        data: Union[List,Tuple, Set, Dictionary], Optional
-            The data to be populated in the table.
+        """Class for parsing and preparing data for proper table display.
+
+        Args:
+            data (_type_): Data to be prepared for display.
+            file (_type_): File containing the data to be prepared for display.
+            column_length (_type_): Table column length.
         """
 
         self.data = data
@@ -23,11 +24,14 @@ class DataConverter(object):
         self.column_length = column_length
 
     def parse(self):
-        """
-        Parses data from different data type to list
+        """Parses data from different data type to list
+
+        Raises:
+            UnsupportedDataType: Raises if data type is not supported.
+            ValueError: Raises if data or file not provided or file is empty.
 
         Returns:
-            List
+            List: List of data to be populated in the table.
         """
         if self.data != None:
             if isinstance(self.data, dict):
@@ -60,6 +64,12 @@ class DataConverter(object):
             raise ValueError("Data or file needs to be provided to file table.")
 
     def validate_data(self, data, fields):
+        """Function to valiate whether data values matches with their field properties.
+
+        Args:
+            data (_type_): Data to be validated.
+            fields (_type_): Fields used to validate the data.
+        """
         field_types = list(fields.values())
 
         for row_index, row_data in enumerate(data):
@@ -69,20 +79,41 @@ class DataConverter(object):
                 )
 
     def match_added_row_to_table(self, row):
+        """Function to match newly added row to the table. Pads all missing table fields with 
+        None value.
+
+        Args:
+            row (_type_): Row to be added to the table.
+        Returns:
+            List: List of augmented row data.
+        """
         row = row + ([None] * (self.column_length - len(row)))
         return row
 
     def _fill_missing_values(self, data):
-        # Function to padding all missing table fields with None value.
+        """Function for padding all missing table fields with None value.
 
+        Args:
+            data (_type_): Data to be checked.
+
+        Returns:
+           List[List]: List of augmented list rows.
+        """
         for index, row in enumerate(data):
             data[index] = row + ([None] * (self.column_length - len(row)))
 
         return data
 
     def _transpose_data(self, data):
-        # Function used to swap columns and rows.
-        # Ideally for converting m*n matrix to n*m matrix
+        """Function to transpose data. Function used to swap columns and rows.
+        Ideally for converting m*n matrix to n*m matrix
+
+        Args:
+            data (_type_): Data to be transposed.
+
+        Returns:
+            List[List]: List of augmented list data.
+        """
         new_data = []
         for column_index in range(len(data[0])):
             new_row = []

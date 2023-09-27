@@ -1,8 +1,10 @@
 from ..fields import Field
 
-# Model base class
+
 class Model:
     def __init__(self):
+        """Model base class for creating new Model instances from the given fields."""
+
         # get dict value of subclasses and set model field values
         subclass_dict = self.__class__.__dict__.copy()
         self._model_fields = {}
