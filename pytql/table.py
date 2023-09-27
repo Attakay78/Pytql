@@ -33,7 +33,7 @@ class Formatter(object):
             lambda border_character, gap_character: f"{self.table_color}"
             f"{border_character}{gap_character}{border_character}{Color.color_terminate}"
         )
-    
+
     def style_horizontal_line(self):
         """Function to style horizontal lines around table.
 
@@ -69,9 +69,7 @@ class Formatter(object):
         formatted_row = f"{self.table_color}| {Color.color_terminate}"
         for index, cell in enumerate(data):
             if index == 0:
-                formatted_row += (
-                    f"{color}{str(cell):{self.max_field_widths[index]}s}{Color.color_terminate}"
-                )
+                formatted_row += f"{color}{str(cell):{self.max_field_widths[index]}s}{Color.color_terminate}"
             else:
                 formatted_row += (
                     f"{self.__gap(self.PADDING_CHARACTER, self.GAP_CHARACTER)}{color}"
@@ -101,7 +99,7 @@ class Table(object):
             row_color (_type_, optional): Table row color. Defaults to Color.default.
             table_color (_type_, optional): Table style color. Defaults to Color.default.
         """
-        
+
         model = model()
         self.__model_fields = model._model_fields
         self.__headers = model._headers
@@ -126,7 +124,6 @@ class Table(object):
         self.__row_color = row_color
         self.__table_color = table_color
         self.__formatter = Formatter(data, self.__table_color)
-        
 
     def __get_max_field_width(self, column_index, data):
         # Calculates the maximum width of each field of the table.
@@ -140,11 +137,19 @@ class Table(object):
             for index in range(loop_length):
                 if (mod_type == "odd") and (index == loop_length - 1):
                     last_val_size = len(str(data[index][column_index]))
-                    max_width = max_width if max_width > last_val_size else last_val_size
+                    max_width = (
+                        max_width if max_width > last_val_size else last_val_size
+                    )
                 else:
                     left_val_size = len(str(data[index][column_index]))
-                    right_val_size = len(str(data[row_length - index - 1][column_index]))
-                    max_val = left_val_size if left_val_size > right_val_size else right_val_size
+                    right_val_size = len(
+                        str(data[row_length - index - 1][column_index])
+                    )
+                    max_val = (
+                        left_val_size
+                        if left_val_size > right_val_size
+                        else right_val_size
+                    )
                     max_width = max_width if max_width > max_val else max_val
 
             return max_width
@@ -184,14 +189,16 @@ class Table(object):
         Returns:
             None.
         """
-        
+
         if data is None:
             data = self.__data.data
 
         data.insert(0, self.__headers)
         self.__max_field_widths = []
         for column_index in range(len(data[0])):
-            self.__max_field_widths.append(self.__get_max_field_width(column_index, data))
+            self.__max_field_widths.append(
+                self.__get_max_field_width(column_index, data)
+            )
 
         data.pop(0)
         self.__formatter.max_field_widths = self.__max_field_widths
@@ -243,7 +250,9 @@ class Table(object):
         else:
             # If new row data fields is less then current table fields, add None
             # to missing field data
-            missing_cells = ["None" for _ in range(table_column_length - new_row_length)]
+            missing_cells = [
+                "None" for _ in range(table_column_length - new_row_length)
+            ]
             _position_row(row + missing_cells)
 
     def add_headers(self, headers):

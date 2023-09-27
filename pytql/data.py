@@ -2,7 +2,6 @@ from .exceptions import ColumnDoesNotExist
 
 
 class Data(object):
-
     def __init__(self, data=None, headers=None):
         """Class used to handle table data.
 
@@ -52,7 +51,7 @@ class Data(object):
 
         Args:
             column (_type_): Column to be filtered.
-        
+
         Returns:
             Boolean : True if column exist else Raises an ColumnDoesNotExist Exception.
         """

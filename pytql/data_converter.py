@@ -79,7 +79,7 @@ class DataConverter(object):
                 )
 
     def match_added_row_to_table(self, row):
-        """Function to match newly added row to the table. Pads all missing table fields with 
+        """Function to match newly added row to the table. Pads all missing table fields with
         None value.
 
         Args:

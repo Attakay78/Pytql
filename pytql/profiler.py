@@ -2,11 +2,9 @@ import cProfile, pstats, io
 
 
 def profile(func):
-
     """A decorator that uses cProfile to profile a function"""
 
     def inner(*args, **kwargs):
-
         profile = cProfile.Profile()
         profile.enable()
         return_value = func(*args, **kwargs)

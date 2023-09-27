@@ -55,7 +55,7 @@ class Field:
         Raises:
             FieldTypeError: Exception to propmt users that field value passed is of incorrect type.
         """
-        if type(value)!= field_type and value!= None:
+        if type(value) != field_type and value != None:
             msg: str = (
                 f"Table[Row:{row_index}, Column:{column_index}]: Expected type of value {value} is"
                 f"`{field_type}` but `{type(value)}` given."
@@ -196,17 +196,20 @@ class TextField(CharField):
 
 class IntField(Field):
     """IntField class for setting integer field values for models."""
+
     def validate_field_props(self, value, row_index, column_index):
         super().validate_field_props(value, row_index, column_index, int)
 
 
 class BooleanField(Field):
     """BooleanField class for setting boolean field values for models."""
+
     def validate_field_props(self, value, row_index, column_index):
         super().validate_field_props(value, row_index, column_index, bool)
 
 
 class FloatField(Field):
     """FloatField class for setting float field values for models."""
+
     def validate_field_props(self, value, row_index, column_index):
         super().validate_field_props(value, row_index, column_index, float)

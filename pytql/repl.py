@@ -1,8 +1,8 @@
 from .colors import Color
 
 
-HEADER = f"{Color.cyan}Welcome to Pytql REPL! We hope you enjoy your stay!{Color.color_terminate}" # Repl Header Text to display.
-FOOTER = f"{Color.cyan}Thanks for visiting the Pytql REPL today!{Color.color_terminate}" #Repl Footer Text to display.
+HEADER = f"{Color.cyan}Welcome to Pytql REPL! We hope you enjoy your stay!{Color.color_terminate}"  # Repl Header Text to display.
+FOOTER = f"{Color.cyan}Thanks for visiting the Pytql REPL today!{Color.color_terminate}"  # Repl Footer Text to display.
 
 
 def default_repl(scope) -> None:
@@ -46,6 +46,7 @@ def interactive_repl(scope) -> None:
         scope (_type_): Variable scope to expose to the repl.
     """
     from code import InteractiveConsole
+
     header = HEADER + "\n" + "crtl-d to quit\n"
     footer = FOOTER
     scope_vars = scope()
@@ -59,6 +60,7 @@ def ipython_repl(scope) -> None:
         scope (_type_): Variable scope to expose to the repl.
     """
     import IPython
+
     header = HEADER
     footer = FOOTER
     scope_vars = scope()
@@ -67,17 +69,15 @@ def ipython_repl(scope) -> None:
     print(footer)
 
 
-
 class ReplType:
-    """Class listing of repl types.
-    """
+    """Class listing of repl types."""
+
     default_repl = default_repl
     interactive_repl = interactive_repl
     ipython_repl = ipython_repl
 
 
-
-def start_client(module_name, repl_type:ReplType = ReplType.default_repl):
+def start_client(module_name, repl_type: ReplType = ReplType.default_repl):
     """Function to start the Pytql client repl.
 
     Args:
