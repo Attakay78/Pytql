@@ -4,9 +4,13 @@ from copy import deepcopy
 # Internal imports
 from .data import Data
 from .colors import Color
-from .data_converter import DataConverter
+from .data_converter import (
+    DataConverter,
+)
 from .model import Model
-from .exceptions import ColumnDoesNotExist
+from .exceptions import (
+    ColumnDoesNotExist,
+)
 
 
 class Table(object):
@@ -37,32 +41,38 @@ class Table(object):
         table_color: Color
             Color for the table design
         """
+        self.BORDER_CHARACTER = "+"
+        self.HEADER_CHARACTER = "-"
+        self.GAP_CHARACTER = "|"
+        self.PADDING_CHARACTER = " "
+
         model = model()
         self.__model_fields = model._model_fields
         self.__headers = model._headers
 
         self.__data_converter = DataConverter(
-            data=data, file=file, column_length=len(self.__headers)
+            data=data,
+            file=file,
+            column_length=len(self.__headers),
         )
         parsed_data = self.__data_converter.parse()
-        self.__data_converter.validate_data(data=parsed_data, fields=self.__model_fields)
-        self.__data = Data(data=parsed_data, headers=self.__headers)
-
+        self.__data_converter.validate_data(
+            data=parsed_data,
+            fields=self.__model_fields,
+        )
+        self.__data = Data(
+            data=parsed_data,
+            headers=self.__headers,
+        )
         self.__max_field_widths = []
-        self.__gap_length = 3
-        self.__gap = " " * self.__gap_length
         self.__filter_column = None
         self.__header_color = header_color
         self.__row_color = row_color
         self.__table_color = table_color
-
-    def __max_width(self):
-        # Calculates the maximum width of the table.
-
-        total_width = 0
-        for width in self.__max_field_widths:
-            total_width += width
-        return total_width + (len(self.__max_field_widths) - 1) * self.__gap_length
+        self.__gap = (
+            lambda border_character, gap_character: f"{self.__table_color}"
+            f"{border_character}{gap_character}{border_character}{Color.color_terminate}"
+        )
 
     def __get_max_field_width(self, column_index, data):
         # Calculates the maximum width of each field of the table.
@@ -96,29 +106,57 @@ class Table(object):
         if row_length % 2 == 0:
             return _get_max_width(row_length // 2)
         else:
-            return _get_max_width((row_length // 2) + 1, mod_type="odd")
+            return _get_max_width(
+                (row_length // 2) + 1,
+                mod_type="odd",
+            )
+
+    def __style_table(self):
+        table_style= f"{self.__table_color}+-{Color.color_terminate}"
+        for index, width in enumerate(self.__max_field_widths):
+            if index == 0:
+                table_style += f"{self.__table_color}{self.HEADER_CHARACTER * width:{width}s}{Color.color_terminate}"
+            elif index == len(self.__max_field_widths) - 1:
+                table_style += (
+                    f"{self.__gap(self.HEADER_CHARACTER, self.BORDER_CHARACTER)}"
+                    f"{self.__table_color}{self.HEADER_CHARACTER * (width+1):{width}s}+{Color.color_terminate}"
+                )
+            else:
+                table_style += (
+                    f"{self.__gap(self.HEADER_CHARACTER, self.BORDER_CHARACTER)}"
+                    f"{self.__table_color}{self.HEADER_CHARACTER * width:{width}s}{Color.color_terminate}"
+                )
+        return table_style
+
+    def __format_row_data(self, data, color):
+        formatted_row = f"{self.__table_color}| {Color.color_terminate}"
+        for index, cell in enumerate(data):
+            if index == 0:
+                formatted_row += f"{color}{str(cell):{self.__max_field_widths[index]}s}{Color.color_terminate}"
+            else:
+                formatted_row += (
+                    f"{self.__gap(self.PADDING_CHARACTER, self.GAP_CHARACTER)}{color}"
+                    f"{str(cell):{self.__max_field_widths[index]}s}{Color.color_terminate}"
+                )
+        formatted_row += f"{self.__table_color} |{Color.color_terminate}"
+        return formatted_row
 
     def __draw_header(self):
-        # Drawing table header using string formatting
-        format_header = ""
-        for index, header in enumerate(self.__headers):
-            if index == 0:
-                format_header += f"{self.__header_color}{header:{self.__max_field_widths[index]}s}{Color.color_terminate}"
-            else:
-                format_header += f"{self.__header_color}{self.__gap}{header:{self.__max_field_widths[index]}s}{Color.color_terminate}"
-        return format_header
+        return self.__format_row_data(
+            self.__headers,
+            self.__header_color,
+        )
 
     def __draw_row(self, data):
         # Drawing table rows using string formatting
         for row in data:
-            format_row = ""
-            for index, cell in enumerate(row):
-                if index == 0:
-                    format_row += f"{self.__row_color}{str(cell):{self.__max_field_widths[index]}s}{Color.color_terminate}"
-                else:
-                    format_row += f"{self.__row_color}{self.__gap}{str(cell):{self.__max_field_widths[index]}s}{Color.color_terminate}"
-
-            print(format_row)
+            print(
+                self.__format_row_data(
+                    row,
+                    self.__row_color,
+                )
+            )
+        print(self.__style_table())
 
     def draw_table(self, data):
         """
@@ -133,14 +171,15 @@ class Table(object):
         data.insert(0, self.__headers)
         self.__max_field_widths = []
         for column_index in range(len(data[0])):
-            self.__max_field_widths.append(self.__get_max_field_width(column_index, data))
+            self.__max_field_widths.append(
+                self.__get_max_field_width(column_index, data)
+            )
 
         data.pop(0)
 
-        heading = self.__draw_header()
-        print(f"{self.__table_color}{'=' * self.__max_width()}{Color.color_terminate}")
-        print(heading)
-        print(f"{self.__table_color}{'=' * self.__max_width()}{Color.color_terminate}")
+        print(self.__style_table())
+        print(self.__draw_header())
+        print(self.__style_table())
 
         self.__draw_row(data=data)
         print("\n")
@@ -157,13 +196,21 @@ class Table(object):
             None.
         """
         new_row = self.__data_converter.match_added_row_to_table(row=row)
-        self.__data_converter.validate_data(data=[new_row], fields=self.__model_fields)
+        self.__data_converter.validate_data(
+            data=[new_row],
+            fields=self.__model_fields,
+        )
 
-        def _position_row(new_row=new_row):
+        def _position_row(
+            new_row=new_row,
+        ):
             if position:
                 self.__data.data.insert(position, new_row)
             else:
-                self.__data.data.insert(len(self.__data.data), new_row)
+                self.__data.data.insert(
+                    len(self.__data.data),
+                    new_row,
+                )
 
         new_row_length = len(row)
         table_column_length = len(self.__data.data[0])
