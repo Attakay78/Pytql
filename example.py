@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
     # Data to populate Student table.
     student_data = [
-        ["Richardfgfnggkmg", "Quaicoe", 23, 243],
+        ["Richard", "Quaicoe", 23, 243],
         ["Mike", "Kuam", 33, 123],
         ["Roynam", "Skim", 13, 56],
         ["Leon", "Santa", 29, 23],
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     # )
 
     # Draw student table
-    student_table.draw_table(student_table.get_data())
+    student_table.draw_table()
 
     # # Add new row to student row at position 3
     # # student_table.add_row(["Jon", "Doe", 23, 232], position=3)
@@ -57,19 +57,19 @@ if __name__ == "__main__":
     # student_table.draw_table(t2)
 
     # # Query student table by filtering with `First Name` and `length` columns.
-    # t1 = (
-    #     student_table.query()
-    #     .filter_by("First Name")
-    #     .equals("Richard")
-    #     .filter_by("length")
-    #     .greater_than("50")
-    #     .end_query()
-    # )
-    # student_table.draw_table(t1)
+    t1 = (
+        student_table.query()
+        .filter_by("First Name")
+        .equals("Richard")
+        .filter_by("length")
+        .greater_than("20")
+        .end_query()
+    )
+    student_table.draw_table(t1)
 
     # # # Update student `age` column
-    # # student_table.update("age").where("32", "67")
-    # # student_table.draw_table(student_table.get_data())
+    student_table.update("age").where("33", "67")
+    student_table.draw_table()
 
     # # # NB: Same operations perform on Student table can be performed on Employee table
     # employee_table.draw_table(employee_table.get_data())

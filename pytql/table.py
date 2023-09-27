@@ -152,7 +152,7 @@ class Table(object):
             )
         print(self.__style_table())
 
-    def draw_table(self, data):
+    def draw_table(self, data=None):
         """
         Draws table with data provided.
 
@@ -162,6 +162,9 @@ class Table(object):
         Returns:
             None.
         """
+        if data is None:
+            data = self.__data.data
+
         data.insert(0, self.__headers)
         self.__max_field_widths = []
         for column_index in range(len(data[0])):
@@ -174,6 +177,7 @@ class Table(object):
         print(self.__style_table())
 
         self.__draw_row(data=data)
+        print("\n")
 
     def add_row(self, row, position=None):
         """
