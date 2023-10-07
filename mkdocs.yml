@@ -1,0 +1,81 @@
+site_name: PyTQL
+
+theme:
+  name: material
+  features:
+    - navigation.path
+    - navigation.expand
+    - content.code.copy
+    - content.code.select
+    - content.code.annotate
+    - content.tabs.link
+  icon:
+    repo: fontawesome/brands/github-alt
+    logo: material/table-search
+    admonition:
+      tip: octicons/squirrel-16
+  palette: 
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - scheme: default
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/lightbulb
+        name: Switch to dark mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+# Page Navigation
+nav:
+  - Getting Started: 'index.md'
+  - 'API Reference':
+    - Model: 'model.md'
+    - Fields: 'fields.md'
+    - Colors: 'colors.md'
+    - Data: 'data.md'
+    - Table: 'table.md'
+    - Cli Client: 'repl.md'
+    - Exceptions: 'exceptions.md'
+  - 'Release Notes': 'releases.md'
+
+repo_url: https://github.com/Attakay78/Pytql
+repo_name: Attakay78/Pytql
+
+extra:
+  social:
+    - icon: fontawesome/solid/paper-plane
+      link: mailto:richardquaicoe78@gmail.com
+      name: Richard Quaicoe<richardquaicoe78@gmail.com>
+
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/richard-quaicoe-545ba211b/
+    
+    - icon: fontawesome/brands/medium
+      link: https://medium.com/@richardquaicoe78
+
+copyright: Copyright &copy; 2023 Richard Quaicoe
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.critic
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+extra_css:
+  - stylesheets/extra.css

@@ -1,6 +1,8 @@
 # Example
-
-from pytql import Table, Color, Model, CharField, IntField
+from pytql.model import Model
+from pytql.fields import CharField, IntField
+from pytql.colors import Color
+from pytql.table import Table
 from pytql.repl import start_client, ReplType
 
 
@@ -44,18 +46,28 @@ if __name__ == "__main__":
         row_color=Color.green,
         table_color=Color.blue,
     )
-    employee_table.draw_table()
 
     # Draw student table
     student_table.draw_table()
 
     # # Add new row to student row at position 3
-    # # student_table.add_row(["Jon", "Doe", 23, 232], position=3)
-    # # student_table.draw_table(student_table.get_data())
+    student_table.add_row(["Jon", "Doe", 23, 232], position=3)
+    student_table.draw_table(student_table.get_data())
+
+    query_data = (
+    student_table.query()
+    .filter_by("First Name")
+    .equals("Richard")
+    .filter_by("length")
+    .greater_than("20")
+    .end_query()
+    )
+
+    student_table.draw_table(query_data)
 
     # # Query student table by filtering `First Name`.
-    # t2 = student_table.query().filter_by("First Name").equals("Richard").end_query()
-    # student_table.draw_table(t2)
+    t2 = student_table.query().filter_by("First Name").equals("Richard").end_query()
+    student_table.draw_table(t2)
 
     # # Query student table by filtering with `First Name` and `length` columns.
     t1 = (
@@ -73,5 +85,7 @@ if __name__ == "__main__":
     student_table.draw_table()
 
     # # # NB: Same operations perform on Student table can be performed on Employee table
-    # employee_table.draw_table(employee_table.get_data())
-    # start_client(__name__, repl_type=ReplType.ipython_repl)
+    employee_table.draw_table(employee_table.get_data())
+
+    # Start cli client
+    start_client(__name__, repl_type=ReplType.ipython_repl)

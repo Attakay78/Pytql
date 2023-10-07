@@ -1,4 +1,4 @@
-from ..exceptions import FieldTypeError, MaxLengthExceeded, FieldCantBeNull
+from .exceptions import FieldTypeError, MaxLengthExceeded, FieldCantBeNull
 from typing import Any, Optional
 
 
@@ -110,7 +110,7 @@ class CharField(Field):
         """CharField class for setting character/string field values for models.
 
         Args:
-            max_length (int, optional): Maximum length of field value. Defaults to 225.
+            max_length (int): Maximum length of field value. Defaults to 225.
             choices (Any, Optional): list of choices field values can be selected. Default is None.
             NB: Check other parameter descriptions from Field class.
         """
