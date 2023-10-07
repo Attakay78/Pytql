@@ -77,4 +77,4 @@ Sample output of table generated.<br><br>
 
 ## Documentation
 
-Check [docs](https://) for more information about the project and api references.
+Check [docs](https://attakay78.github.io/Pytql/) for more information about the project and api references.
