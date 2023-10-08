@@ -1,0 +1,9 @@
+/* .root {
+    --md-tooltip-width: 3800;
+} */
+
+.md-typeset .admonition,
+.md-typeset details {
+  border-width: 0;
+  border-left-width: 8px;
+}
