@@ -192,7 +192,8 @@ class Table(object):
 
         if data is None:
             data = self.__data.data
-
+        if type(data) is not list:
+            raise ValueError(f"Expected a list, got %s" % type(data))
         data.insert(0, self.__headers)
         self.__max_field_widths = []
         for column_index in range(len(data[0])):
